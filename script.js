@@ -168,18 +168,28 @@ bgMusic.addEventListener("pause", () => {
 
 function switchBackgroundMusic(track) {
   console.log(`🔄 Switching background music to: ${track}`);
+
+  const wasPlaying = !bgMusic.paused;
   bgMusic.src = track;
   bgMusic.load();
-  bgMusic.muted = false; // Ensure unmuted
+  bgMusic.muted = true; // Start muted for mobile compatibility
   bgMusic.volume = 0.175;
-  bgMusic
-    .play()
-    .then(() => {
-      console.log(`🎵 Background music switched and playing: ${track}`);
-    })
-    .catch((err) => {
-      console.error("❌ Background music play failed:", err);
-    });
+
+  if (wasPlaying) {
+    bgMusic
+      .play()
+      .then(() => {
+        console.log(`🎵 Background music switched to: ${track}`);
+        // Unmute after 200ms
+        setTimeout(() => {
+          bgMusic.muted = false;
+          console.log("🔊 Switched music unmuted");
+        }, 200);
+      })
+      .catch((err) => {
+        console.error("❌ Background music switch failed:", err);
+      });
+  }
 }
 
 // ========================================
@@ -240,7 +250,7 @@ function startExperience() {
   }
 
   function attemptPlay() {
-    // START BACKGROUND MUSIC
+    // START BACKGROUND MUSIC - muted first for mobile compatibility
     console.log("🎵 Attempting to play background music...");
     console.log(
       "Music readyState:",
@@ -251,35 +261,35 @@ function startExperience() {
       bgMusic.muted,
     );
 
-    // UNMUTE background music (started muted for autoplay compatibility)
-    bgMusic.muted = false;
+    // Keep muted for initial play (mobile compatibility)
     bgMusic.volume = 0.175;
+    // bgMusic already has muted=true from HTML
 
     bgMusic
       .play()
       .then(() => {
-        console.log(
-          "🎵🎵🎵 Background music (Normal.mp3) started successfully!",
-        );
-        console.log(
-          "Music playing:",
-          !bgMusic.paused,
-          "currentTime:",
-          bgMusic.currentTime,
-          "muted:",
-          bgMusic.muted,
-        );
+        console.log("🎵 Background music started (muted initially for mobile)");
+
+        // Unmute after music starts playing
+        setTimeout(() => {
+          bgMusic.muted = false;
+          console.log(
+            "🔊 Music unmuted! Volume:",
+            bgMusic.volume,
+            "Playing:",
+            !bgMusic.paused,
+          );
+        }, 300);
       })
       .catch((err) => {
-        console.error("❌❌❌ Background music failed:", err);
-        // Try muted fallback
-        bgMusic.muted = true;
-        bgMusic
-          .play()
-          .then(() => {
-            console.warn("⚠️ Music playing muted as fallback");
-          })
-          .catch((e) => console.error("Music muted fallback also failed:", e));
+        console.error("❌ Background music play failed:", err);
+        // Try one more time with explicit play
+        setTimeout(() => {
+          bgMusic
+            .play()
+            .then(() => console.log("🎵 Music started on retry"))
+            .catch((e) => console.error("Music retry also failed:", e));
+        }, 500);
       });
 
     video
