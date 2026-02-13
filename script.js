@@ -261,36 +261,49 @@ function startExperience() {
       bgMusic.muted,
     );
 
-    // Keep muted for initial play (mobile compatibility)
+    // Ensure music is loaded and ready
+    bgMusic.load();
     bgMusic.volume = 0.175;
-    // bgMusic already has muted=true from HTML
+    bgMusic.muted = true; // Ensure muted for mobile compatibility
 
-    bgMusic
-      .play()
-      .then(() => {
-        console.log("🎵 Background music started (muted initially for mobile)");
-
-        // Unmute after music starts playing
-        setTimeout(() => {
-          bgMusic.muted = false;
+    // Wait a bit for load to complete, then play
+    setTimeout(() => {
+      bgMusic
+        .play()
+        .then(() => {
           console.log(
-            "🔊 Music unmuted! Volume:",
-            bgMusic.volume,
-            "Playing:",
-            !bgMusic.paused,
+            "🎵 Background music started (muted initially for mobile)",
           );
-        }, 300);
-      })
-      .catch((err) => {
-        console.error("❌ Background music play failed:", err);
-        // Try one more time with explicit play
-        setTimeout(() => {
-          bgMusic
-            .play()
-            .then(() => console.log("🎵 Music started on retry"))
-            .catch((e) => console.error("Music retry also failed:", e));
-        }, 500);
-      });
+
+          // Unmute after music starts playing
+          setTimeout(() => {
+            bgMusic.muted = false;
+            console.log(
+              "🔊 Music unmuted! Volume:",
+              bgMusic.volume,
+              "Playing:",
+              !bgMusic.paused,
+            );
+          }, 500); // Longer delay for mobile
+        })
+        .catch((err) => {
+          console.error("❌ Background music play failed:", err);
+          // Try one more time with explicit play
+          setTimeout(() => {
+            bgMusic
+              .play()
+              .then(() => {
+                console.log("🎵 Music started on retry");
+                // Unmute on retry too!
+                setTimeout(() => {
+                  bgMusic.muted = false;
+                  console.log("🔊 Music unmuted on retry");
+                }, 500);
+              })
+              .catch((e) => console.error("Music retry also failed:", e));
+          }, 500);
+        });
+    }, 200); // Give time for load to start
 
     video
       .play()
