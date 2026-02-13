@@ -140,6 +140,7 @@ processFrame();
 // ========================================
 const bgMusic = document.getElementById("bgMusic");
 bgMusic.volume = 0.175; // 17.5% volume for background music
+bgMusic.load(); // Preload music
 console.log("✓ Background music element found:", bgMusic);
 console.log("Music src:", bgMusic.src, "readyState:", bgMusic.readyState);
 
@@ -214,14 +215,26 @@ function startExperience() {
   if (video.readyState < 3) {
     // Less than HAVE_FUTURE_DATA
     console.log("⏳ Video not ready, waiting for canplay event...");
+    let hasPlayed = false;
     video.addEventListener(
       "canplay",
       () => {
-        console.log("✓ Video ready, starting playback");
-        attemptPlay();
+        if (!hasPlayed) {
+          hasPlayed = true;
+          console.log("✓ Video ready, starting playback");
+          attemptPlay();
+        }
       },
       { once: true },
     );
+    // Fallback: if canplay doesn't fire in 2 seconds, try anyway
+    setTimeout(() => {
+      if (!hasPlayed) {
+        hasPlayed = true;
+        console.log("⏰ Canplay timeout - attempting play anyway");
+        attemptPlay();
+      }
+    }, 2000);
   } else {
     attemptPlay();
   }
@@ -298,7 +311,7 @@ function startExperience() {
               console.warn("⚠️ Unmuted playback blocked, keeping muted:", err);
               video.muted = true; // Fallback to muted
             });
-        }, 100); // Small delay to ensure video is actually playing
+        }, 300); // Longer delay for slower devices
       })
       .catch((err) => {
         console.error("❌ Video play failed even muted:", err);
