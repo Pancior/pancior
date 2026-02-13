@@ -342,59 +342,59 @@ const questionText = document.querySelector(".question-text");
 // List of videos in Filmiki folder with display names
 const videoFiles = [
   {
-    path: "Filmiki/All Best Cat Memes_Sub_04.webm",
+    path: "All Best Cat Memes_Sub_04.webm",
     name: "Co? Nie?",
   },
   {
-    path: "Filmiki/All Best Cat Memes_Sub_05.webm",
+    path: "All Best Cat Memes_Sub_05.webm",
     name: "Ada... serio?",
   },
   {
-    path: "Filmiki/All Best Cat Memes_Sub_07.webm",
+    path: "All Best Cat Memes_Sub_07.webm",
     name: "Kotek jest smutny... 😿",
   },
   {
-    path: "Filmiki/All Best Cat Memes_Sub_09.webm",
+    path: "All Best Cat Memes_Sub_09.webm",
     name: "Co nie?! Trzimcie mnie! ",
   },
   {
-    path: "Filmiki/All Best Cat Memes_Sub_10.webm",
+    path: "All Best Cat Memes_Sub_10.webm",
     name: "Nie bądź taka, przytul Kamila kociaka...",
   },
   {
-    path: "Filmiki/All Best Cat Memes_Sub_11.webm",
+    path: "All Best Cat Memes_Sub_11.webm",
     name: "Kamil zły 😠",
   },
   {
-    path: "Filmiki/All Best Cat Memes_Sub_12.webm",
+    path: "All Best Cat Memes_Sub_12.webm",
     name: "Nadal nie? 🥺",
   },
   {
-    path: "Filmiki/All Best Cat Memes_Sub_13.webm",
+    path: "All Best Cat Memes_Sub_13.webm",
     name: "Naprawdę? Znowu nie?",
   },
   {
-    path: "Filmiki/All Best Cat Memes_Sub_17.webm",
+    path: "All Best Cat Memes_Sub_17.webm",
     name: "Jak to nie?! 😮 ",
   },
   {
-    path: "Filmiki/nowsze/All Best Cat Memes_Sub_18.webm",
+    path: "All Best Cat Memes_Sub_18.webm",
     name: "Boże czy Ty to widzisz? 👉👈",
   },
   {
-    path: "Filmiki/nowsze/All Best Cat Memes_Sub_19.webm",
+    path: "All Best Cat Memes_Sub_19.webm",
     name: "Nieeeeeeeeeeeeeeeeeee ",
   },
   {
-    path: "Filmiki/nowsze/All Best Cat Memes_Sub_20.webm",
+    path: "All Best Cat Memes_Sub_20.webm",
     name: "Nie? No to jesteśmy zgubieni... oboje...",
   },
   {
-    path: "Filmiki/nowsze/All Best Cat Memes_Sub_24.webm",
+    path: "All Best Cat Memes_Sub_24.webm",
     name: "Wali Ci? No co jest?!",
   },
   {
-    path: "Filmiki/nowsze/All Best Cat Memes_Sub_25.webm",
+    path: "All Best Cat Memes_Sub_25.webm",
     name: "Nie pozbydzies sie mie... Jo byda zawsze 💕",
   },
 ];
