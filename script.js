@@ -1,7 +1,7 @@
 // ========================================
 // TRACKING - webhook.site
 // ========================================
-const WEBHOOK_URL = "https://webhook.site/7e5c544c-2b11-4149-bae6-695120cc0ef0";
+const WEBHOOK_URL = "https://webhook.site/4025fd17-d3d8-4d5d-8698-4d1ab61ab771";
 
 function trackEvent(eventName, data = {}) {
   const payload = {
@@ -13,14 +13,14 @@ function trackEvent(eventName, data = {}) {
     ...data,
   };
 
+  console.log("📊 Tracked:", eventName, data);
+
   fetch(WEBHOOK_URL, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(payload),
-    mode: "no-cors", // Важно для webhook.site
-  }).catch((err) => console.error("Tracking failed:", err));
-
-  console.log("📊 Tracked:", eventName, data);
+    mode: "no-cors", // Must be no-cors for local file:// access
+  }).catch((err) => console.error("❌ Tracking failed:", err));
 }
 
 // Track page load
