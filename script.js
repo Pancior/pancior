@@ -217,140 +217,52 @@ function startExperience() {
     video.networkState,
   );
 
+  // CRITICAL: Start music IMMEDIATELY in user interaction handler (MUST be synchronous for mobile!)
+  bgMusic.volume = 0.175;
+  bgMusic.muted = true;
+  bgMusic
+    .play()
+    .then(() => {
+      console.log("🎵 Music started muted");
+      setTimeout(() => {
+        bgMusic.muted = false;
+        console.log("🔊 Music unmuted!");
+      }, 500);
+    })
+    .catch((err) => {
+      console.error("❌ Music failed:", err);
+      setTimeout(() => {
+        bgMusic
+          .play()
+          .then(() => {
+            console.log("🎵 Music retry success");
+            setTimeout(() => {
+              bgMusic.muted = false;
+            }, 500);
+          })
+          .catch((e) => console.error("Music retry failed:", e));
+      }, 300);
+    });
+
   // MOBILE CHROME FIX: Play muted first, then try to unmute
   video.muted = true; // Start muted for compatibility
   video.volume = 0.5; // 50% volume
 
-  // If video is not ready, wait for it
-  if (video.readyState < 3) {
-    // Less than HAVE_FUTURE_DATA
-    console.log("⏳ Video not ready, waiting for canplay event...");
-    let hasPlayed = false;
-    video.addEventListener(
-      "canplay",
-      () => {
-        if (!hasPlayed) {
-          hasPlayed = true;
-          console.log("✓ Video ready, starting playback");
-          attemptPlay();
-        }
-      },
-      { once: true },
-    );
-    // Fallback: if canplay doesn't fire in 2 seconds, try anyway
-    setTimeout(() => {
-      if (!hasPlayed) {
-        hasPlayed = true;
-        console.log("⏰ Canplay timeout - attempting play anyway");
-        attemptPlay();
-      }
-    }, 2000);
-  } else {
-    attemptPlay();
-  }
-
-  function attemptPlay() {
-    // START BACKGROUND MUSIC - muted first for mobile compatibility
-    console.log("🎵 Attempting to play background music...");
-    console.log(
-      "Music readyState:",
-      bgMusic.readyState,
-      "volume:",
-      bgMusic.volume,
-      "muted:",
-      bgMusic.muted,
-    );
-
-    // Ensure music is loaded and ready
-    bgMusic.load();
-    bgMusic.volume = 0.175;
-    bgMusic.muted = true; // Ensure muted for mobile compatibility
-
-    // Wait a bit for load to complete, then play
-    setTimeout(() => {
-      bgMusic
-        .play()
-        .then(() => {
-          console.log(
-            "🎵 Background music started (muted initially for mobile)",
-          );
-
-          // Unmute after music starts playing
-          setTimeout(() => {
-            bgMusic.muted = false;
-            console.log(
-              "🔊 Music unmuted! Volume:",
-              bgMusic.volume,
-              "Playing:",
-              !bgMusic.paused,
-            );
-          }, 500); // Longer delay for mobile
-        })
-        .catch((err) => {
-          console.error("❌ Background music play failed:", err);
-          // Try one more time with explicit play
-          setTimeout(() => {
-            bgMusic
-              .play()
-              .then(() => {
-                console.log("🎵 Music started on retry");
-                // Unmute on retry too!
-                setTimeout(() => {
-                  bgMusic.muted = false;
-                  console.log("🔊 Music unmuted on retry");
-                }, 500);
-              })
-              .catch((e) => console.error("Music retry also failed:", e));
-          }, 500);
-        });
-    }, 200); // Give time for load to start
-
-    video
-      .play()
-      .then(() => {
-        console.log(
-          "✓ Video playing (muted initially for mobile compatibility)",
-        );
-        console.log(
-          "Current time:",
-          video.currentTime,
-          "duration:",
-          video.duration,
-        );
-
-        // Try to unmute after video starts playing
-        setTimeout(() => {
-          video.muted = false;
-          logoUnmuted = true;
-          console.log("🔊 Attempting to unmute... Muted:", video.muted);
-
-          // Force play again after unmuting (mobile Chrome requirement)
-          video
-            .play()
-            .then(() => {
-              console.log("✓ Video playing WITH AUDIO!");
-            })
-            .catch((err) => {
-              console.warn("⚠️ Unmuted playback blocked, keeping muted:", err);
-              video.muted = true; // Fallback to muted
-            });
-        }, 300); // Longer delay for slower devices
-      })
-      .catch((err) => {
-        console.error("❌ Video play failed even muted:", err);
-        console.log(
-          "Video state - src:",
-          video.src,
-          "readyState:",
-          video.readyState,
-        );
-        // Try one more time with explicit play
-        setTimeout(() => {
-          console.log("🔄 Retrying play...");
-          video.play().catch((e) => console.error("❌ Retry failed:", e));
-        }, 500);
-      });
-  }
+  // Start video IMMEDIATELY too
+  video
+    .play()
+    .then(() => {
+      console.log("✓ Video playing");
+      setTimeout(() => {
+        video.muted = false;
+        logoUnmuted = true;
+        console.log("🔊 Video unmuted");
+        video.play(); // Force play after unmute
+      }, 300);
+    })
+    .catch((err) => {
+      console.error("❌ Video failed:", err);
+    });
 }
 
 // Start on overlay click
