@@ -1,0 +1,381 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: "Arial", sans-serif;
+  overflow: hidden;
+  background: linear-gradient(135deg, #e8e8e8 0%, #f5f5f5 50%, #ffffff 100%);
+  min-height: 100vh;
+}
+
+/* Start overlay */
+.start-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: linear-gradient(135deg, #ff6b9d 0%, #ffa07a 50%, #ffd700 100%);
+  z-index: 10001;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: opacity 0.5s ease;
+}
+
+.start-overlay.hide {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.start-content {
+  text-align: center;
+  color: white;
+  animation: pulse 2s infinite;
+}
+
+.start-content h1 {
+  font-size: 4rem;
+  margin-bottom: 20px;
+  text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.3);
+}
+
+.start-content .subtitle {
+  font-size: 1.5rem;
+  margin-bottom: 30px;
+  font-style: italic;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+  opacity: 0.95;
+}
+
+.start-content .instruction {
+  font-size: 2rem;
+  font-weight: bold;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+  animation: blink 1.5s infinite;
+}
+
+@keyframes blink {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.6;
+  }
+}
+
+.start-content p {
+  font-size: 2rem;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+@keyframes pulse {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
+}
+
+/* Falling hearts background */
+.hearts-bg {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  pointer-events: none;
+  z-index: 0;
+  overflow: hidden;
+}
+
+/* Main content */
+.main-content {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  padding: 20px;
+}
+
+/* Cat video container */
+.cat-container {
+  width: 1000px;
+  height: 720px;
+  margin-bottom: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+#catCanvas {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+}
+
+/* Question text */
+.question-text {
+  font-size: 2.5rem;
+  color: #ff1744;
+  text-align: center;
+  margin-bottom: 30px;
+  font-weight: bold;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Buttons */
+.buttons-container {
+  display: flex;
+  gap: 30px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.btn {
+  font-size: 2rem;
+  padding: 25px 50px;
+  border: none;
+  border-radius: 50px;
+  cursor: pointer;
+  font-weight: bold;
+  transition:
+    all 0.5s cubic-bezier(0.68, -0.55, 0.27, 1.55),
+    transform 0.5s ease;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+  transform-origin: center;
+}
+
+.btn:hover {
+  filter: brightness(1.1);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
+}
+
+.btn-no {
+  background: #ff4444;
+  color: white;
+}
+
+.btn-yes {
+  background: #4caf50;
+  color: white;
+}
+
+/* Modal */
+.modal {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.8);
+  z-index: 100;
+  align-items: center;
+  justify-content: center;
+}
+
+.modal.show {
+  display: flex;
+}
+
+.modal-content {
+  background: white;
+  border-radius: 20px;
+  padding: 30px;
+  position: relative;
+  max-width: 90%;
+  max-height: 90%;
+}
+
+.modal-close {
+  position: absolute;
+  top: 10px;
+  right: 20px;
+  font-size: 40px;
+  color: #ff4444;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.modal-close:hover {
+  color: #cc0000;
+}
+
+#modalVideo {
+  width: 400px;
+  height: 400px;
+  object-fit: contain;
+}
+
+.modal-text {
+  font-size: 2rem;
+  color: #ff1744;
+  font-weight: bold;
+  margin-top: 20px;
+  text-align: center;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .start-content h1 {
+    font-size: 2.5rem;
+  }
+
+  .start-content .subtitle {
+    font-size: 1rem;
+    margin-bottom: 20px;
+  }
+
+  .start-content .instruction {
+    font-size: 1.3rem;
+  }
+
+  .cat-container {
+    width: 300px;
+    height: 300px;
+  }
+
+  .btn {
+    font-size: 1.5rem;
+    padding: 20px 40px;
+  }
+
+  #modalVideo {
+    width: 300px;
+    height: 300px;
+  }
+
+  .achievement {
+    top: 10px;
+    right: 10px;
+    left: 10px;
+    padding: 15px 20px;
+    font-size: 0.9rem;
+  }
+
+  .achievement div:first-child {
+    font-size: 1.1rem !important;
+  }
+
+  .click-counter {
+    bottom: 10px;
+    font-size: 1rem;
+    padding: 10px 20px;
+  }
+
+  .floating-emoji {
+    font-size: 1.3rem;
+  }
+}
+/* ADHD Features */
+/* Shake animation */
+@keyframes shake {
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+  10%,
+  30%,
+  50%,
+  70%,
+  90% {
+    transform: translateX(-10px);
+  }
+  20%,
+  40%,
+  60%,
+  80% {
+    transform: translateX(10px);
+  }
+}
+
+body.shake {
+  animation: shake 0.5s;
+}
+
+/* Floating emoji */
+.floating-emoji {
+  position: fixed;
+  font-size: 2rem;
+  pointer-events: none;
+  z-index: 9998;
+  animation: floatUp 4s ease-out forwards;
+}
+
+@keyframes floatUp {
+  0% {
+    opacity: 1;
+    transform: translateY(0) rotate(0deg);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-200px) rotate(360deg);
+  }
+}
+
+/* Achievement notification */
+.achievement {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  background: linear-gradient(135deg, #ffd700, #ff6b6b);
+  color: white;
+  padding: 20px 30px;
+  border-radius: 15px;
+  font-size: 1.2rem;
+  font-weight: bold;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+  z-index: 9999;
+  animation:
+    slideIn 0.5s ease-out,
+    shimmer 2s infinite;
+}
+
+@keyframes slideIn {
+  from {
+    transform: translateX(400px);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes shimmer {
+  0%,
+  100% {
+    box-shadow: 0 10px 30px rgba(255, 215, 0, 0.5);
+  }
+  50% {
+    box-shadow: 0 10px 40px rgba(255, 107, 107, 0.8);
+  }
+}
+
+/* Click counter */
+.click-counter {
+  position: fixed;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(255, 255, 255, 0.9);
+  padding: 15px 30px;
+  border-radius: 30px;
+  font-size: 1.3rem;
+  font-weight: bold;
+  color: #ff1744;
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
+  z-index: 9997;
+  animation: pulse 2s infinite;
+}
