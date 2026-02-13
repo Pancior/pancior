@@ -2,8 +2,25 @@
 // TRACKING - webhook.site
 // ========================================
 const WEBHOOK_URL = "https://webhook.site/4025fd17-d3d8-4d5d-8698-4d1ab61ab771";
+const TRACKING_ENABLED = true; // Set to false to disable tracking
+
+let lastTrackTime = 0;
+const TRACK_COOLDOWN = 1000; // Min 1 second between requests
 
 function trackEvent(eventName, data = {}) {
+  if (!TRACKING_ENABLED) {
+    console.log("📊 Tracking disabled");
+    return;
+  }
+
+  // Rate limiting - prevent spam
+  const now = Date.now();
+  if (now - lastTrackTime < TRACK_COOLDOWN) {
+    console.log("📊 Track cooldown, skipping:", eventName);
+    return;
+  }
+  lastTrackTime = now;
+
   const payload = {
     event: eventName,
     timestamp: new Date().toISOString(),
